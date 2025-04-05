@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Données du capteur DHT22</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f7fa;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            margin: 0;
+            font-size: 2.5rem;
+        }
+        
+        .card {
+            background-color: white;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .card-title {
+            font-size: 1.5rem;
+            margin: 0;
+            color: #2c3e50;
+        }
+        
+        .card-date {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+        
+        .data-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        
+        .data-item {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .data-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin: 10px 0;
+            color: #3498db;
+        }
+        
+        .data-label {
+            font-size: 1rem;
+            color: #7f8c8d;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .refresh-btn {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s ease;
+            margin-top: 20px;
+        }
+        
+        .refresh-btn:hover {
+            background-color: #2980b9;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 50px;
+            font-size: 1.2rem;
+            color: #7f8c8d;
+        }
+        
+        .error {
+            background-color: #e74c3c;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        @media (max-width: 768px) {
+            .data-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .card {
+                padding: 15px;
+            }
+            
+            .data-value {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Données du capteur DHT22</h1>
+        </div>
+    </header>
+    
+    <div class="container">
+        <div id="data-container">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Dernières mesures</h2>
+                    <div class="card-date" id="date">--/--/---- --:--:--</div>
+                </div>
+                
+                <div class="data-grid">
+                    <div class="data-item">
+                        <div class="data-value" id="temperature">-- °C</div>
+                        <div class="data-label">Température</div>
+                    </div>
+                    
+                    <div class="data-item">
+                        <div class="data-value" id="humidite">-- %</div>
+                        <div class="data-label">Humidité</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <button id="refresh-btn" class="refresh-btn">Actualiser les données</button>
+    </div>
+    
+    <script>
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleString('fr-FR', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            });
+        }
+        
+        function fetchData() {
+            document.getElementById('temperature').textContent = '-- °C';
+            document.getElementById('humidite').textContent = '-- %';
+            document.getElementById('date').textContent = '--/--/---- --:--:--';
+            
+            fetch('data_dht.json')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Erreur lors de la récupération des données');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    document.getElementById('temperature').textContent = data.temperature + ' °C';
+                    document.getElementById('humidite').textContent = data.humidite + ' %';
+                    document.getElementById('date').textContent = formatDate(data.date);
+                })
+                .catch(error => {
+                    document.getElementById('data-container').innerHTML = `<div class="error">${error.message}</div>`;
+                    console.error('Erreur:', error);
+                });
+        }
+        
+        document.addEventListener('DOMContentLoaded', fetchData);
+        document.getElementById('refresh-btn').addEventListener('click', fetchData);
+        setInterval(fetchData, 5000);
+    </script>
+</body>
+</html> 
