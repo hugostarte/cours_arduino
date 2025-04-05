@@ -4,33 +4,40 @@ Ce dépôt contient plusieurs projets Arduino pour apprendre et expérimenter av
 
 ## Liste des projets
 
-1. [Contrôle de LED](led_controle/README.md)
+1. [Contrôle de LED](led_controle/)
    - Projet de base pour contrôler une LED avec un Arduino UNO
    - Clignotement simple avec un intervalle d'une seconde
+   - [Voir le code](led_controle/led_controle.ino)
 
-2. [Lecture de température et d'humidité avec DHT22](lecture_temperature_DHT/README.md)
+2. [Lecture de température et d'humidité avec DHT22](lecture_temperature_DHT/)
    - Utilisation d'un ESP8266 pour lire les données d'un capteur DHT22
    - Envoi des données à un serveur web via WiFi
+   - [Voir le code](lecture_temperature_DHT/lecture_temperature_DHT.ino)
 
-3. [Lecture de température et d'humidité avec DHT22 et affichage OLED](dht_lecture/README.md)
+3. [Lecture de température et d'humidité avec DHT22 et affichage OLED](dht_lecture/)
    - Utilisation d'un Arduino UNO pour lire les données d'un capteur DHT22
    - Affichage des données sur un écran OLED
+   - [Voir le code](dht_lecture/dht_lecture.ino)
 
-4. [Contrôle de servo-moteur avec potentiomètre](servo_potentiometre/README.md)
+4. [Contrôle de servo-moteur avec potentiomètre](servo_potentiometre/)
    - Contrôle d'un servo-moteur avec un potentiomètre sur Arduino UNO
    - Position du servo proportionnelle à la valeur du potentiomètre
+   - [Voir le code](servo_potentiometre/servo_potentiometre.ino)
 
-5. [Contrôle de moteur avec potentiomètre](moteur_potentiometre/README.md)
+5. [Contrôle de moteur avec potentiomètre](moteur_potentiometre/)
    - Contrôle de la vitesse d'un moteur avec un potentiomètre sur Arduino UNO
    - Vitesse du moteur proportionnelle à la valeur du potentiomètre
+   - [Voir le code](moteur_potentiometre/moteur_potentiometre.ino)
 
-6. [Contrôle de buzzer avec potentiomètre et affichage OLED](buzzer_potentiometre/README.md)
+6. [Contrôle de buzzer avec potentiomètre et affichage OLED](buzzer_potentiometre/)
    - Contrôle du volume d'un buzzer avec un potentiomètre
    - Affichage du volume sur un écran OLED
+   - [Voir le code](buzzer_potentiometre/buzzer_potentiometre.ino)
 
-7. [Affichage de messages aléatoires sur écran OLED](ecran_oled_messages/README.md)
+7. [Affichage de messages aléatoires sur écran OLED](ecran_oled_messages/)
    - Affichage de messages aléatoires sur un écran OLED avec Arduino UNO
    - Changement de message toutes les 2 secondes
+   - [Voir le code](ecran_oled_messages/ecran_oled_messages.ino)
 
 ## Matériel nécessaire
 
