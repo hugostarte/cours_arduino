@@ -34,18 +34,43 @@ Pin A0     →                         Pin du milieu
 Le code se compose de plusieurs parties :
 
 1. **Inclusion des bibliothèques** :
-   - Servo : pour contrôler le servo-moteur
+```cpp
+#include <Servo.h>
+```
 
 2. **Configuration** :
-   - Définition des pins pour le servo et le potentiomètre
-   - Initialisation du servo-moteur
-   - Configuration de la communication série
+```cpp
+Servo monServo;  // Création d'un objet Servo
+const int pinServo = 9;    // Pin du servo-moteur
+const int pinPot = A0;     // Pin du potentiomètre
+
+void setup() {
+  Serial.begin(9600);      // Initialisation de la communication série
+  monServo.attach(pinServo);  // Attache le servo au pin spécifié
+}
+```
 
 3. **Boucle principale** :
-   - Lecture de la valeur du potentiomètre (0-1023)
-   - Conversion de cette valeur en angle (0-180°)
-   - Application de l'angle au servo-moteur
-   - Affichage des valeurs sur le moniteur série
+```cpp
+void loop() {
+  // Lecture de la valeur du potentiomètre (0-1023)
+  int valeurPot = analogRead(pinPot);
+  
+  // Conversion en angle (0-180 degrés)
+  int angle = map(valeurPot, 0, 1023, 0, 180);
+  
+  // Application de l'angle au servo
+  monServo.write(angle);
+  
+  // Affichage des valeurs
+  Serial.print("Potentiomètre: ");
+  Serial.print(valeurPot);
+  Serial.print(" Angle: ");
+  Serial.println(angle);
+  
+  delay(15);  // Petit délai pour un mouvement plus fluide
+}
+```
 
 ## Fonctionnement
 

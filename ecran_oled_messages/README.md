@@ -29,20 +29,77 @@ GND         →   GND
 Le code se compose de plusieurs parties :
 
 1. **Inclusion des bibliothèques** :
-   - Wire : pour la communication I2C
-   - Adafruit_GFX : pour les graphiques
-   - Adafruit_SSD1306 : pour l'écran OLED
+```cpp
+#include <Wire.h>
+#include <Adafruit_GFX.h>
+#include <Adafruit_SSD1306.h>
+```
 
 2. **Configuration** :
-   - Définition des dimensions de l'écran (128x64 pixels)
-   - Définition de l'adresse I2C (0x3C)
-   - Initialisation de l'écran OLED
-   - Définition d'un tableau de messages à afficher
+```cpp
+#define SCREEN_WIDTH 128
+#define SCREEN_HEIGHT 64
+#define OLED_RESET -1
+#define SCREEN_ADDRESS 0x3C
+
+Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
+
+// Tableau des messages à afficher
+const char* messages[] = {
+  "Bonjour!",
+  "2 * 2 = 4",
+  "Arduino est cool",
+  "ESP8266 WiFi",
+  "Hello World!",
+  "Temperature: 25C",
+  "Humidite: 60%",
+  "Bienvenue!",
+  "Ca marche!",
+  "Test ecran OLED"
+};
+
+const int nombreMessages = sizeof(messages) / sizeof(messages[0]);
+
+void setup() {
+  Serial.begin(115200);
+  
+  // Initialisation de l'écran OLED
+  if(!display.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS)) {
+    Serial.println(F("Échec de l'initialisation SSD1306"));
+    for(;;);
+  }
+  
+  display.clearDisplay();
+  display.setTextSize(1);
+  display.setTextColor(SSD1306_WHITE);
+}
+```
 
 3. **Boucle principale** :
-   - Sélection aléatoire d'un message
-   - Affichage du message centré sur l'écran
-   - Attente de 2 secondes avant le message suivant
+```cpp
+void loop() {
+  // Sélection aléatoire d'un message
+  int indexMessage = random(nombreMessages);
+  const char* message = messages[indexMessage];
+  
+  // Affichage du message
+  display.clearDisplay();
+  display.setCursor(0, 0);
+  
+  // Centrage du texte
+  int16_t x1, y1;
+  uint16_t w, h;
+  display.getTextBounds(message, 0, 0, &x1, &y1, &w, &h);
+  int x = (SCREEN_WIDTH - w) / 2;
+  int y = (SCREEN_HEIGHT - h) / 2;
+  
+  display.setCursor(x, y);
+  display.println(message);
+  display.display();
+  
+  delay(2000);  // Attente de 2 secondes
+}
+```
 
 ## Fonctionnement
 

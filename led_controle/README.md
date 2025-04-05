@@ -26,14 +26,23 @@ GND        →   Cathode (-)
 Le code est très simple et se compose de deux parties principales :
 
 1. **Configuration (setup)** :
-   - Configuration du pin 13 en sortie
+```cpp
+const int ledPin = 13;  // Définition du pin pour la LED
+
+void setup() {
+  pinMode(ledPin, OUTPUT);  // Configuration du pin en sortie
+}
+```
 
 2. **Boucle principale (loop)** :
-   - Allumage de la LED
-   - Attente de 1 seconde
-   - Extinction de la LED
-   - Attente de 1 seconde
-   - Répétition du cycle
+```cpp
+void loop() {
+  digitalWrite(ledPin, HIGH);  // Allume la LED
+  delay(1000);                 // Attend 1 seconde
+  digitalWrite(ledPin, LOW);   // Éteint la LED
+  delay(1000);                 // Attend 1 seconde
+}
+```
 
 ## Fonctionnement
 

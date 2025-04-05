@@ -42,22 +42,80 @@ A2        →                                        SDA
 Le code se compose de plusieurs parties :
 
 1. **Inclusion des bibliothèques** :
-   - Wire : pour la communication I2C
-   - Adafruit_GFX : pour les graphiques
-   - Adafruit_SSD1306 : pour l'écran OLED
-   - SoftWire : pour utiliser des pins I2C personnalisés
+```cpp
+#include <Wire.h>
+#include <Adafruit_GFX.h>
+#include <Adafruit_SSD1306.h>
+#include <SoftWire.h>
+```
 
 2. **Configuration** :
-   - Définition des pins pour le buzzer, le potentiomètre et l'écran OLED
-   - Initialisation de l'écran OLED avec SoftWire
-   - Configuration des pins I2C personnalisés (A0 pour SCL, A2 pour SDA)
+```cpp
+#define SCREEN_WIDTH 128
+#define SCREEN_HEIGHT 64
+#define OLED_RESET -1
+#define SCREEN_ADDRESS 0x3C
+
+Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
+SoftWire Wire(A0, A2);  // SCL sur A0, SDA sur A2
+
+const int pinBuzzer = 9;     // Pin du buzzer
+const int pinPot = 15;       // Pin du potentiomètre
+
+void setup() {
+  Serial.begin(9600);
+  
+  // Initialisation de l'écran OLED
+  if(!display.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS)) {
+    Serial.println(F("Échec de l'initialisation SSD1306"));
+    for(;;);
+  }
+  
+  display.clearDisplay();
+  display.setTextSize(1);
+  display.setTextColor(SSD1306_WHITE);
+  display.setCursor(0,0);
+  display.println("Initialisation...");
+  display.display();
+  
+  pinMode(pinBuzzer, OUTPUT);
+}
+```
 
 3. **Boucle principale** :
-   - Lecture de la valeur du potentiomètre (0-1023)
-   - Conversion de cette valeur en volume (0-255)
-   - Application du volume au buzzer via PWM
-   - Affichage du pourcentage sur l'écran OLED
-   - Affichage de messages conditionnels selon le volume
+```cpp
+void loop() {
+  // Lecture du potentiomètre
+  int valeurPot = analogRead(pinPot);
+  
+  // Conversion en volume (0-255)
+  int volume = map(valeurPot, 0, 1023, 0, 255);
+  
+  // Application du volume au buzzer
+  analogWrite(pinBuzzer, volume);
+  
+  // Calcul du pourcentage
+  int pourcentage = map(valeurPot, 0, 1023, 0, 100);
+  
+  // Affichage sur l'écran OLED
+  display.clearDisplay();
+  display.setCursor(0,0);
+  display.print("Volume: ");
+  display.print(pourcentage);
+  display.println("%");
+  
+  // Messages conditionnels
+  if (pourcentage >= 50) {
+    display.println("Aie j'ai mal!");
+  }
+  if (pourcentage >= 90) {
+    display.println("STOP STP!");
+  }
+  
+  display.display();
+  delay(100);
+}
+```
 
 ## Fonctionnement
 

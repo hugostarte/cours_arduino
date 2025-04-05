@@ -37,21 +37,76 @@ const char* serverUrl = "http://votre-serveur.com/dht.php";
 Le code se compose de plusieurs parties :
 
 1. **Inclusion des bibliothèques** :
-   - DHT : pour le capteur DHT22
-   - ESP8266WiFi : pour la connexion WiFi
-   - ESP8266HTTPClient : pour les requêtes HTTP
-   - ArduinoJson : pour la création et le traitement de JSON
+```cpp
+#include <DHT.h>
+#include <ESP8266WiFi.h>
+#include <ESP8266HTTPClient.h>
+#include <ArduinoJson.h>
+```
 
 2. **Configuration** :
-   - Configuration des paramètres WiFi
-   - Initialisation du capteur DHT22
-   - Configuration de la communication série
+```cpp
+#define DHTPIN D2     // Pin de données du DHT22
+#define DHTTYPE DHT22 // Type de capteur
+
+DHT dht(DHTPIN, DHTTYPE);
+
+void setup() {
+  Serial.begin(115200);
+  dht.begin();
+  
+  // Connexion WiFi
+  WiFi.begin(ssid, password);
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+  }
+  Serial.println("\nConnecté au WiFi");
+}
+```
 
 3. **Boucle principale** :
-   - Lecture des valeurs du capteur
-   - Création d'un objet JSON avec les données
-   - Envoi des données au serveur
-   - Attente de 2 secondes avant la prochaine lecture
+```cpp
+void loop() {
+  // Lecture des valeurs
+  float temperature = dht.readTemperature();
+  float humidite = dht.readHumidity();
+  
+  // Vérification des erreurs
+  if (isnan(temperature) || isnan(humidite)) {
+    Serial.println("Erreur de lecture du DHT22");
+    delay(1000);
+    return;
+  }
+  
+  // Création du JSON
+  StaticJsonDocument<200> doc;
+  doc["temperature"] = temperature;
+  doc["humidite"] = humidite;
+  
+  String jsonString;
+  serializeJson(doc, jsonString);
+  
+  // Envoi des données
+  if (WiFi.status() == WL_CONNECTED) {
+    HTTPClient http;
+    http.begin(serverUrl);
+    http.addHeader("Content-Type", "application/json");
+    
+    int httpResponseCode = http.POST(jsonString);
+    
+    if (httpResponseCode > 0) {
+      Serial.printf("Code de réponse HTTP: %d\n", httpResponseCode);
+    } else {
+      Serial.printf("Erreur: %s\n", http.errorToString(httpResponseCode).c_str());
+    }
+    
+    http.end();
+  }
+  
+  delay(2000); // Attente de 2 secondes
+}
+```
 
 ## Fonctionnement
 
