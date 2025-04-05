@@ -17,13 +17,13 @@ Ce projet permet de contrôler un buzzer à l'aide d'un potentiomètre et d'affi
    - Pin négatif (-) → GND de l'Arduino
 
 2. **Potentiomètre** :
-   - Pin du milieu (wiper) → Pin 15 de l'Arduino
+   - Pin du milieu (wiper) → Pin A1 de l'Arduino
    - Pin 1 → 5V de l'Arduino
    - Pin 3 → GND de l'Arduino
 
 3. **Écran OLED** :
-   - SCL → A0 de l'Arduino
-   - SDA → A2 de l'Arduino
+   - SCL → A5 de l'Arduino (pin I2C par défaut)
+   - SDA → A4 de l'Arduino (pin I2C par défaut)
    - VCC → 5V de l'Arduino
    - GND → GND de l'Arduino
 
@@ -31,10 +31,10 @@ Ce projet permet de contrôler un buzzer à l'aide d'un potentiomètre et d'affi
 Arduino UNO    Buzzer          Potentiomètre    Écran OLED
 Pin 9     →    Pin positif (+)  
 GND       →    Pin négatif (-)  Pin 3            GND
-Pin 15    →                      Pin du milieu
+Pin A1    →                      Pin du milieu
 5V        →                      Pin 1            VCC
-A0        →                                        SCL
-A2        →                                        SDA
+A5        →                                        SCL
+A4        →                                        SDA
 ```
 
 ## Explication du code
@@ -46,7 +46,6 @@ Le code se compose de plusieurs parties :
 #include <Wire.h>
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
-#include <SoftWire.h>
 ```
 
 2. **Configuration** :
@@ -57,10 +56,9 @@ Le code se compose de plusieurs parties :
 #define SCREEN_ADDRESS 0x3C
 
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
-SoftWire Wire(A0, A2);  // SCL sur A0, SDA sur A2
 
 const int pinBuzzer = 9;     // Pin du buzzer
-const int pinPot = 15;       // Pin du potentiomètre
+const int pinPot = A1;       // Pin du potentiomètre
 
 void setup() {
   Serial.begin(9600);
@@ -140,7 +138,7 @@ Vous pouvez modifier le code pour changer le comportement du buzzer et de l'affi
 
 ## Notes importantes
 
-- La bibliothèque SoftWire est nécessaire pour utiliser des pins I2C personnalisés
+- L'Arduino UNO utilise les pins A4 (SDA) et A5 (SCL) pour l'I2C par défaut
 - Si l'écran OLED ne s'affiche pas, vérifiez les connexions et l'adresse I2C
 - Le buzzer peut être contrôlé directement par le pin de l'Arduino car il consomme peu de courant
-- Si vous utilisez un Arduino UNO, notez que le pin 15 n'existe pas. Utilisez un autre pin analogique comme A1 
+- Le potentiomètre est connecté au pin A1 car il est disponible sur l'Arduino UNO 

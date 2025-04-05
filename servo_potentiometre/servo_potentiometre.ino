@@ -1,33 +1,26 @@
 #include <Servo.h>
 
-// Définition des broches
-#define SERVO_PIN D1    // servomoteur
-#define POT_PIN A0      // potentiomètre
-
 Servo monServo;
+const int servoPin = 9;
+const int potentiometrePin = A0;
 
 void setup() {
-  Serial.begin(19200);
+  monServo.attach(servoPin);
+  Serial.begin(9600);
   
-  monServo.attach(SERVO_PIN);
+  Serial.println("Initialisation du controle de servo-moteur...");
 }
 
 void loop() {
-
-  int valeurPot = analogRead(POT_PIN); 
-  
-  // Conversion en angle (0-180) - map(convertit une valeur analogique en une valeur numérique)
+  int valeurPot = analogRead(potentiometrePin);
   int angle = map(valeurPot, 0, 1023, 0, 180);
   
-
   monServo.write(angle);
   
-
-  Serial.print("Potentiomètre: ");
+  Serial.print("Valeur potentiometre: ");
   Serial.print(valeurPot);
-  Serial.print(" | Angle: ");
-  Serial.print(angle);
-  Serial.println("°");
+  Serial.print(" Angle servo: ");
+  Serial.println(angle);
   
   delay(15);
 } 

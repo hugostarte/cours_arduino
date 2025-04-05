@@ -1,7 +1,6 @@
 #include <Wire.h>
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
-#include <SoftWire.h>
 
 #define SCREEN_WIDTH 128
 #define SCREEN_HEIGHT 64
@@ -9,45 +8,22 @@
 #define SCREEN_ADDRESS 0x3C
 
 const int buzzerPin = 9;
-const int potentiometrePin = 15;
+const int potentiometrePin = A1;
 
-// Définition des pins I2C personnalisés
-const int SDA_PIN = A2;
-const int SCL_PIN = A0;
-
-// Création d'un objet SoftWire pour l'I2C personnalisé
-SoftWire sw(SDA_PIN, SCL_PIN);
-
-// Création de l'objet display avec SoftWire
-Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &sw, OLED_RESET);
+Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 
 void setup() {
   pinMode(buzzerPin, OUTPUT);
   Serial.begin(9600);
   
-  Serial.println("Initialisation de l'écran OLED...");
-  
-  // Initialisation de SoftWire
-  sw.begin();
-  
-  // Test de l'adresse I2C
-  sw.beginTransmission(SCREEN_ADDRESS);
-  byte error = sw.endTransmission();
-  
-  if (error == 0) {
-    Serial.println("Écran OLED trouvé à l'adresse 0x3C");
-  } else {
-    Serial.print("Erreur lors de la communication avec l'écran OLED. Code d'erreur: ");
-    Serial.println(error);
-    Serial.println("Vérifiez les connexions et l'adresse I2C.");
-  }
+  Serial.println("Initialisation de l'ecran OLED...");
   
   if(!display.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS)) {
-    Serial.println(F("Échec de l'initialisation de l'écran OLED"));
+    Serial.println(F("Echec initialisation ecran OLED"));
     for(;;);
   }
   
-  Serial.println("Écran OLED initialisé avec succès!");
+  Serial.println("Ecran OLED initialise avec succes!");
   
   display.clearDisplay();
   display.setTextSize(1);
@@ -72,6 +48,7 @@ void loop() {
   display.print(pourcentage);
   display.println("%");
   
+  // Petit bonus pour ajouter un message sur l'ecran en fonction du volume
   if (pourcentage >= 90) {
     display.println("STOP STP!");
     display.setTextSize(2);

@@ -12,16 +12,24 @@ Ce dépôt contient plusieurs projets Arduino pour apprendre et expérimenter av
    - Utilisation d'un ESP8266 pour lire les données d'un capteur DHT22
    - Envoi des données à un serveur web via WiFi
 
-3. [Contrôle de servo-moteur avec potentiomètre](servo_potentiometre/README.md)
+3. [Lecture de température et d'humidité avec DHT22 et affichage OLED](dht_lecture/README.md)
+   - Utilisation d'un Arduino UNO pour lire les données d'un capteur DHT22
+   - Affichage des données sur un écran OLED
+
+4. [Contrôle de servo-moteur avec potentiomètre](servo_potentiometre/README.md)
    - Contrôle d'un servo-moteur avec un potentiomètre sur Arduino UNO
    - Position du servo proportionnelle à la valeur du potentiomètre
 
-4. [Contrôle de buzzer avec potentiomètre et affichage OLED](buzzer_potentiometre/README.md)
+5. [Contrôle de moteur avec potentiomètre](moteur_potentiometre/README.md)
+   - Contrôle de la vitesse d'un moteur avec un potentiomètre sur Arduino UNO
+   - Vitesse du moteur proportionnelle à la valeur du potentiomètre
+
+6. [Contrôle de buzzer avec potentiomètre et affichage OLED](buzzer_potentiometre/README.md)
    - Contrôle du volume d'un buzzer avec un potentiomètre
    - Affichage du volume sur un écran OLED
 
-5. [Affichage de messages aléatoires sur écran OLED](ecran_oled_messages/README.md)
-   - Affichage de messages aléatoires sur un écran OLED avec ESP8266
+7. [Affichage de messages aléatoires sur écran OLED](ecran_oled_messages/README.md)
+   - Affichage de messages aléatoires sur un écran OLED avec Arduino UNO
    - Changement de message toutes les 2 secondes
 
 ## Matériel nécessaire
@@ -38,7 +46,10 @@ Ce dépôt contient plusieurs projets Arduino pour apprendre et expérimenter av
 - Potentiomètre 10kΩ
 - Buzzer
 - Écran OLED 0.96" (128x64)
-- ESP8266 (pour les projets WiFi)
+- Moteur à courant continu
+- Transistor (2N2222 ou similaire)
+- Diode (1N4007 ou similaire)
+- ESP8266 (pour le projet WiFi)
 
 ## Bibliothèques requises
 
@@ -48,7 +59,6 @@ Ce dépôt contient plusieurs projets Arduino pour apprendre et expérimenter av
 | Adafruit SSD1306 | Adafruit | 2.5.7 | Affichage OLED |
 | Adafruit GFX Library | Adafruit | 1.11.5 | Affichage OLED |
 | Servo | Arduino | 1.2.1 | Contrôle servo |
-| SoftWire | Peter Scargill | 1.0.0 | I2C personnalisé |
 | ArduinoJson | Benoit Blanchon | 6.21.3 | Communication JSON |
 | ESP8266WiFi | ESP8266 Community | 1.0.0 | Connexion WiFi |
 | ESP8266HTTPClient | ESP8266 Community | 1.0.0 | Requêtes HTTP |
@@ -61,6 +71,19 @@ Ce dépôt contient plusieurs projets Arduino pour apprendre et expérimenter av
 4. Pour les projets ESP8266 :
    - Ajoutez l'URL `http://arduino.esp8266.com/stable/package_esp8266com_index.json` dans les préférences
    - Installez le support ESP8266 via le gestionnaire de cartes
+
+## Pins par défaut
+
+### Arduino UNO
+- I2C : SDA (A4), SCL (A5)
+- PWM : 3, 5, 6, 9, 10, 11
+- Analogiques : A0, A1, A2, A3, A4, A5
+- Numériques : 0-13
+
+### ESP8266
+- I2C : GPIO4 (D2), GPIO5 (D1)
+- PWM : GPIO0-GPIO15
+- Analogique : A0
 
 ## Structure des projets
 

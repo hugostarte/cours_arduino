@@ -3,7 +3,7 @@
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
 
-#define DHTPIN 8
+#define DHTPIN 2
 #define DHTTYPE DHT22
 #define SCREEN_WIDTH 128
 #define SCREEN_HEIGHT 64
@@ -17,10 +17,14 @@ void setup() {
   Serial.begin(9600);
   dht.begin();
   
+  Serial.println("Initialisation du capteur DHT22...");
+  
   if(!display.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS)) {
-    Serial.println(F("Échec de l'initialisation de l'écran OLED"));
+    Serial.println(F("Echec initialisation ecran OLED"));
     for(;;);
   }
+  
+  Serial.println("Ecran OLED initialise avec succes!");
   
   display.clearDisplay();
   display.setTextSize(1);

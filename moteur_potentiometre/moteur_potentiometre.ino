@@ -4,6 +4,8 @@ const int potentiometrePin = A0;
 void setup() {
   pinMode(moteurPin, OUTPUT);
   Serial.begin(9600);
+  
+  Serial.println("Initialisation du controle de moteur...");
 }
 
 void loop() {
