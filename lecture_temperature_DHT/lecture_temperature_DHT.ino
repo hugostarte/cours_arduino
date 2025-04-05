@@ -6,9 +6,11 @@
 #define DHTPIN D4      
 #define DHTTYPE DHT22   
 
-const char* ssid = "Redm-H";
-const char* password = "hugocotamere";
+const char* ssid = "NomDuWifi";
+const char* password = "MotDePasseDuWifi";
 const char* serverUrl = "http://hugostawiarski.fr/cours_arduino/dht.php";
+// Données visibles sur http://hugostawiarski.fr/cours_arduino/
+
 
 DHT dht(DHTPIN, DHTTYPE);
 WiFiClient client;
